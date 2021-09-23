@@ -2,6 +2,7 @@ package models
 
 import (
 	"awesomeProject/jumite/pkg/config"
+	"fmt"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -45,9 +46,11 @@ func FindOne(email string, password string) map[string]interface{} {
 
 	errf := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if errf != nil && errf == bcrypt.ErrMismatchedHashAndPassword { //Password does not match!
-		var resp = map[string]interface{}{"status": false, "message": "Invalid login credentials. Please try again"}
+		var resp = map[string]interface{}{"status": false,"password": user.Password ,"message": "Invalid login credentials. Please try again"}
 		return resp
 	}
+
+	fmt.Println(errf)
 
 	tk := &Token{
 		UserID:  int64(user.ID),
