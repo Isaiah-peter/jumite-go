@@ -20,6 +20,7 @@ type User struct {
 	Password    string `json:"password" binding:"required"`
 	IsAdmin     bool   `json:"is_admin" asn1:"default:false"`
 	PhoneNumber string `json:"phone_number"`
+	Order       []Order
 }
 
 type Token struct {
