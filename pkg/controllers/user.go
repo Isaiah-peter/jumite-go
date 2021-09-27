@@ -58,13 +58,17 @@ func GetUserById(c *fiber.Ctx) error {
 
 func DeleteUser(c *fiber.Ctx) error {
 	token := utils.UseToken(c)
-	id := c.Params("id")
-	verifiedID, err := strconv.ParseInt(fmt.Sprintf("%.f", token["UserID"]), 0, 0)
+	userid := c.Params("id")
+	id, err := strconv.ParseInt(userid, 0, 0)
 	if err != nil {
 		panic(err)
 	}
-	if string(verifiedID) == id {
-		id = string(verifiedID)
+	 verifiedID, err := strconv.ParseInt(fmt.Sprintf("%.f", token["UserID"]), 0, 0)
+	if err != nil {
+		panic(err)
+	}
+
+	if verifiedID == id {
 		db.First(&NewUser, id)
 		db.Delete(&NewUser)
 		c.Status(200)
@@ -81,25 +85,35 @@ func DeleteUser(c *fiber.Ctx) error {
 }
 
 func UpdateUser(c *fiber.Ctx) error {
+	user := &models.User{}
 	token := utils.UseToken(c)
-	id := c.Params("id")
-	db.First(&NewUser, id)
-	if NewUser.Email == "" {
-		return c.Status(500).SendString("User is not available")
-	}
-	hashPassword, err := utils.HashPassword(NewUser.Password)
+	userid := c.Params("id")
+	id, err := strconv.ParseInt(userid, 0, 0)
 	if err != nil {
-		fmt.Println(err)
 		panic(err)
 	}
-	NewUser.Password = hashPassword
-	if err := c.BodyParser(NewUser); err != nil {
+	verifiedID, err := strconv.ParseInt(fmt.Sprintf("%.f", token["UserID"]), 0, 0)
+	if err != nil {
+		panic(err)
+	}
+	db.First(&user, id)
+	if user.Email == "" {
+		return c.Status(500).SendString("User is not available")
+	}
+
+	if err := c.BodyParser(user); err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
-	if token["IsAdmin"] == true || token["UserID"] == id {
-		db.Save(&NewUser)
-		return c.JSON(&NewUser)
+	if token["IsAdmin"] == true || verifiedID == id {
+		fmt.Println(user.Password)
+		password, err := utils.HashPassword(user.Password)
+		if err != nil {
+			return err
+		}
+		user.Password = password
+		db.Save(&user)
+		return c.JSON(&user)
 	}
-	c.Status(fiber.StatusUnauthorized)
-	return c.SendString("you don't own this account and you ale not an admin")
+
+	return c.Status(fiber.StatusUnauthorized).SendString("you don't own this account and you ale not an admin")
 }
