@@ -3,6 +3,7 @@ package routes
 import (
 	"awesomeProject/jumite/pkg/controllers"
 	"awesomeProject/jumite/pkg/utils"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -31,4 +32,7 @@ var MessageRoute = func(route *fiber.App) {
 	route.Get("/message/:id", utils.Authuser(), controllers.GetMessage)
 }
 
-
+var ProductRoute = func(route *fiber.App) {
+	route.Post("/createproduct", controllers.CreateProduct)
+	route.Get("/getProduct", controllers.GetProduct)
+}
