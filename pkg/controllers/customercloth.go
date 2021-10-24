@@ -17,6 +17,6 @@ func CreateProduct(c *fiber.Ctx) error {
 
 func GetProduct(c *fiber.Ctx) error {
 	var product []models.CustomerProduct
-	db.Find(&product)
+	db.Order("created_at DESC").Limit(6).Find(&product)
 	return c.JSON(&product)
 }

@@ -22,6 +22,7 @@ func main() {
 	routes.OrderRoute(app)
 	routes.MessageRoute(app)
 	routes.ProductRoute(app)
+	routes.CommentRoute(app)
 
 	app.Listen(":6000")
 }

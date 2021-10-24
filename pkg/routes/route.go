@@ -36,3 +36,8 @@ var ProductRoute = func(route *fiber.App) {
 	route.Post("/createproduct", controllers.CreateProduct)
 	route.Get("/getProduct", controllers.GetProduct)
 }
+
+var CommentRoute = func(route *fiber.App) {
+	route.Post("/comment", utils.Authuser(), controllers.CreateComment)
+	route.Get("/comment", utils.Authuser(), controllers.GetComment)
+}
