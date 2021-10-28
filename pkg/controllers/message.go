@@ -4,8 +4,9 @@ import (
 	"awesomeProject/jumite/pkg/models"
 	"awesomeProject/jumite/pkg/utils"
 	"fmt"
-	"github.com/gofiber/fiber/v2"
 	"strconv"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func CreateMessage(c *fiber.Ctx) error {
@@ -24,7 +25,7 @@ func CreateMessage(c *fiber.Ctx) error {
 }
 
 func GetMessage(c *fiber.Ctx) error {
-	var message []models.Order
+	var message []models.Message
 	token := utils.UseToken(c)
 	ids := c.Params("id")
 	id, err := strconv.ParseInt(ids, 0, 0)
@@ -35,7 +36,7 @@ func GetMessage(c *fiber.Ctx) error {
 	if err != nil {
 		panic(err)
 	}
-	if token["IsAdmin"] == true || verifiedID == id  {
+	if token["IsAdmin"] == true || verifiedID == id {
 		db.Where("order_id=?", id).Find(&message)
 		return c.JSON(&message)
 	}
