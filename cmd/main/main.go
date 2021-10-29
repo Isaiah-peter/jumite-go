@@ -2,6 +2,7 @@ package main
 
 import (
 	"awesomeProject/jumite/pkg/routes"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -9,6 +10,8 @@ import (
 
 func main() {
 	app := fiber.New()
+
+	PORT := os.Getenv("PORT")
 
 	app.Get("/", func(ctx *fiber.Ctx) error {
 		return ctx.SendString("welcome")
@@ -24,5 +27,9 @@ func main() {
 	routes.ProductRoute(app)
 	routes.CommentRoute(app)
 
-	app.Listen(":6000")
+	if PORT == "" {
+		PORT = "6000"
+	}
+
+	app.Listen(PORT)
 }
