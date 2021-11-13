@@ -17,15 +17,8 @@ type Order struct {
 	Messages    []Message
 }
 
-type Message struct {
-	gorm.Model
-	OrderId  int64  `json:"order_id"`
-	SenderId int64  `json:"sender_id"`
-	Messages string `json:"messages"`
-}
-
 func init() {
 	config.Connect()
 	db = config.GetDB()
-	db.AutoMigrate(&Order{}, &Message{})
+	db.AutoMigrate(&Order{})
 }
