@@ -37,7 +37,7 @@ func GetMessage(c *fiber.Ctx) error {
 		panic(err)
 	}
 	if token["IsAdmin"] == true || verifiedID == id {
-		db.Where("order_id=?", id).Find(&message)
+		db.Where("reciever_id=?", id).Or("sender_id=?", id).Find(&message)
 		return c.JSON(&message)
 	}
 
