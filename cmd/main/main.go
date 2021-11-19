@@ -26,6 +26,7 @@ func main() {
 	routes.MessageRoute(app)
 	routes.ProductRoute(app)
 	routes.CommentRoute(app)
+	routes.ConversationRoute(app)
 
 	if PORT == "" {
 		PORT = "6000"

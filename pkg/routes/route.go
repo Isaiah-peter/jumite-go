@@ -32,6 +32,11 @@ var MessageRoute = func(route *fiber.App) {
 	route.Get("/message/:id", utils.Authuser(), controllers.GetMessage)
 }
 
+var ConversationRoute = func(route *fiber.App) {
+	route.Post("/conversation", utils.Authuser(), controllers.CreateConversation)
+	route.Get("/conversation/:id", utils.Authuser(), controllers.GetConversation)
+}
+
 var ProductRoute = func(route *fiber.App) {
 	route.Post("/createproduct", controllers.CreateProduct)
 	route.Get("/getProduct", controllers.GetProduct)
